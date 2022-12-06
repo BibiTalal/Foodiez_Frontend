@@ -1,12 +1,12 @@
-part of 'cuisine.dart';
+part of 'dishes.dart';
 
-Cuisine _$CuisineFromJson(Map<String, dynamic> json) => Cuisine(
+Dish _$DishFromJson(Map<String, dynamic> json) => Dish(
       id: json['id'] as int?,
       name: json['name'] as String,
       image: json['image'] as String,
     );
 
-Map<String, dynamic> _$CuisineToJson(Cuisine instance) => <String, dynamic>{
+Map<String, dynamic> _$DishToJson(Dish instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'image': instance.image,

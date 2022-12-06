@@ -28,7 +28,7 @@ class Welcome extends StatelessWidget {
                 child: TextButton(
                   child: Text("Countine .."),
                   onPressed: () {
-                    context.push("/");
+                    context.go("/");
                   },
                 ))
           ],

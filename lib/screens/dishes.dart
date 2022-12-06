@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:foodiez_frontent/providers/cuisine_provider.dart';
-import 'package:foodiez_frontent/models/cuisine.dart';
+import 'package:foodiez_frontent/providers/dishes_provider.dart';
+import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class DishScreen extends StatelessWidget {
+  const DishScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Cuisine> cuisines =
-        Provider.of<CuisinesProvider>(context, listen: false).cuisines;
+    List<Dish> dishes =
+        Provider.of<DishesProvider>(context, listen: false).dishes;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -44,31 +44,16 @@ class HomeScreen extends StatelessWidget {
         child: Column(children: [
           Row(children: [
             Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: Text("Sign In"),
-                  onPressed: () {
-                    context.push("/signin");
-                  },
-                )),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: Text("Sign Up"),
-                  onPressed: () {
-                    context.push("/signup");
-                  },
-                ))
+              padding: const EdgeInsets.all(8.0),
+            )
           ]),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: () {
-                context.push("/addcuisine");
-              },
+              onPressed: () {},
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
-                child: Text("Add a new Cuisine"),
+                child: Text("Add a new Dish"),
               ),
             ),
           ),
@@ -80,9 +65,8 @@ class HomeScreen extends StatelessWidget {
                     (MediaQuery.of(context).size.height),
               ),
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: context.watch<CuisinesProvider>().cuisines.length,
-              itemBuilder: (context, index) =>
-                  CuisineStyle(cuisine: cuisines[index])),
+              itemCount: context.watch<DishesProvider>().dishes.length,
+              itemBuilder: (context, index) => DishStyle(dish: dishes[index])),
         ]),
       ),
     );

@@ -5,9 +5,10 @@ import 'package:foodiez_frontent/providers/cuisine_provider.dart';
 import 'package:foodiez_frontent/models/cuisine.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:foodiez_frontent/providers/add_cuisine_provider.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class AddCuisineScreen extends StatelessWidget {
+  const AddCuisineScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,45 +21,25 @@ class HomeScreen extends StatelessWidget {
             child:
                 Text("Foodiez", style: TextStyle(fontWeight: FontWeight.bold)),
           )),
-      // body: Column(children: [
-      //   Row(children: <Widget>[
-      //     Padding(
-      //       padding: const EdgeInsets.all(20.0),
-      //       child: TextButton(
-      //         child: Text("Sign Up"),
-      //         onPressed: () {
-      //           context.push("/signup");
-      //         },
-      //       ),
-      //     ),
-      //     Row(children: [
-      //       Padding(
-      //           padding: const EdgeInsets.all(20.0),
-      //           child: TextButton(
-      //             child: Text("Sign In"),
-      //             onPressed: () {
-      //               context.push("/signin");
-      //             },
-      //           )),
       body: SingleChildScrollView(
         child: Column(children: [
           Row(children: [
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                  child: Text("Sign In"),
+                  child: Text("Home"),
                   onPressed: () {
-                    context.push("/signin");
+                    context.push("/");
                   },
                 )),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: Text("Sign Up"),
-                  onPressed: () {
-                    context.push("/signup");
-                  },
-                ))
+            // Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: TextButton(
+            //       child: Text("Logout"),
+            //       onPressed: () {
+            //         context.push("/logout");
+            //       },
+            //     ))
           ]),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -68,7 +49,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
-                child: Text("Add a new Cuisine"),
+                child: Text("Add Cuisine"),
               ),
             ),
           ),
@@ -80,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                     (MediaQuery.of(context).size.height),
               ),
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: context.watch<CuisinesProvider>().cuisines.length,
+              itemCount: context.watch<AddCuisineProvider>().addcuisines.length,
               itemBuilder: (context, index) =>
                   CuisineStyle(cuisine: cuisines[index])),
         ]),

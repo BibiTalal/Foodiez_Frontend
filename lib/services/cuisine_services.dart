@@ -8,8 +8,7 @@ Future<List<Cuisine>> getcuisines() async {
   Dio client = Dio();
   List<Cuisine> cuisines = [];
   try {
-    Response response =
-        await client.get("https://coded-pets-api-crud.herokuapp.com/pets");
+    Response response = await client.get("http://127.0.0.1:8000/");
     cuisines = (response.data as List)
         .map((cuisine) => Cuisine.fromJson(cuisine))
         .toList();

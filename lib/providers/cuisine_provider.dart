@@ -1,6 +1,7 @@
 import 'package:foodiez_frontent/services/cuisine_services.dart';
 import 'package:foodiez_frontent/models/cuisine.dart';
 import 'package:flutter/material.dart';
+import 'package:foodiez_frontent/models/cuisine.dart';
 
 class CuisinesProvider extends ChangeNotifier {
   List<Cuisine> cuisines = [
@@ -20,5 +21,16 @@ class CuisinesProvider extends ChangeNotifier {
     notifyListeners();
     cuisines = await getcuisines();
     return cuisines;
+  }
+
+  void addCuisine(String cuisine) {
+    Cuisine model = Cuisine(name: cuisine, image: cuisine);
+    cuisines.add(model);
+    notifyListeners();
+  }
+
+  void deleteCuisine(int index) {
+    cuisines.removeAt(index);
+    notifyListeners();
   }
 }
