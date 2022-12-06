@@ -4,9 +4,16 @@ import 'package:foodiez_frontent/screens/signin.dart';
 import 'package:foodiez_frontent/screens/signup.dart';
 import 'package:foodiez_frontent/screens/home.dart';
 import 'package:foodiez_frontent/screens/welcome.dart';
+import 'package:foodiez_frontent/providers/cuisine_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CuisinesProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 final router = GoRouter(initialLocation: '/', routes: [
