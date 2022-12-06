@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodiez_frontent/providers/auth_provider.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:foodiez_frontent/providers/cuisine_provider.dart';
@@ -42,24 +43,41 @@ class HomeScreen extends StatelessWidget {
       //           )),
       body: SingleChildScrollView(
         child: Column(children: [
-          Row(children: [
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: Text("Sign In"),
-                  onPressed: () {
-                    context.push("/signin");
-                  },
-                )),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: Text("Sign Up"),
-                  onPressed: () {
-                    context.push("/signup");
-                  },
-                ))
-          ]),
+          Row(
+              children: context.watch<AuthProvider>().username == null
+                  ? [
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            child: Text("Sign In"),
+                            onPressed: () {
+                              context.push("/signin");
+                            },
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            child: Text("Sign Up"),
+                            onPressed: () {
+                              context.push("/signup");
+                            },
+                          ))
+                    ]
+                  : [
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            child: Text("SignOut"),
+                            onPressed: () {
+                              var authprovider = context.read<AuthProvider>();
+                              authprovider.logout();
+                            },
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(context.watch<AuthProvider>().username!),
+                      )
+                    ]),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(

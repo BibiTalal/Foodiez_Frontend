@@ -6,6 +6,13 @@ import 'package:foodiez_frontent/models/cuisine.dart';
 import 'package:foodiez_frontent/providers/cuisine_provider.dart';
 import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:foodiez_frontent/providers/dishes_provider.dart';
+import 'package:dio/dio.dart';
+
+class Client {
+  static final Dio dio = Dio(
+    BaseOptions(baseUrl: "http://127.0.0.1:8000"),
+  );
+}
 
 TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
