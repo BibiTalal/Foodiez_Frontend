@@ -12,7 +12,7 @@ class DishScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Dish> dishes =
-        Provider.of<DishesProvider>(context, listen: false).dishes;
+        Provider.of<DishProvider>(context, listen: false).dishes;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -50,7 +50,9 @@ class DishScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push("/adddish");
+              },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Text("Add a new Dish"),
@@ -65,7 +67,7 @@ class DishScreen extends StatelessWidget {
                     (MediaQuery.of(context).size.height),
               ),
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: context.watch<DishesProvider>().dishes.length,
+              itemCount: context.watch<DishProvider>().dishes.length,
               itemBuilder: (context, index) => DishStyle(dish: dishes[index])),
         ]),
       ),

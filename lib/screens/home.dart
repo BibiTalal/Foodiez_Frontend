@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Cuisine> cuisines =
-        Provider.of<CuisinesProvider>(context, listen: false).cuisines;
+        Provider.of<CuisineProvider>(context, listen: false).cuisines;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                     (MediaQuery.of(context).size.height),
               ),
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: context.watch<CuisinesProvider>().cuisines.length,
+              itemCount: context.watch<CuisineProvider>().cuisines.length,
               itemBuilder: (context, index) =>
                   CuisineStyle(cuisine: cuisines[index])),
         ]),

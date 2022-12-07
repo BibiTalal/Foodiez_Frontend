@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:foodiez_frontent/providers/dishes_provider.dart';
 import 'package:foodiez_frontent/screens/dishes.dart';
 import 'package:foodiez_frontent/screens/addcuisine.dart';
-import 'package:foodiez_frontent/providers/add_cuisine_provider.dart';
 import 'package:foodiez_frontent/providers/auth_provider.dart';
+import 'package:foodiez_frontent/screens/adddishes.dart';
 
 void main() {
   runApp(
@@ -30,7 +30,7 @@ final router = GoRouter(initialLocation: '/', routes: [
   ),
   GoRoute(
     path: '/signin',
-    builder: (context, state) => SignedIn(
+    builder: (context, state) => SignIn(
         // password: state.extra as String,
         ),
   ),
@@ -48,6 +48,10 @@ final router = GoRouter(initialLocation: '/', routes: [
     path: '/addcuisine',
     builder: (context, state) => AddCuisineScreen(),
   ),
+  GoRoute(
+    path: '/adddish',
+    builder: (context, state) => AddDishScreen(),
+  ),
 ]);
 
 class MyApp extends StatelessWidget {
@@ -58,9 +62,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => DishesProvider()),
-        ChangeNotifierProvider(create: (context) => CuisinesProvider()),
-        ChangeNotifierProvider(create: (context) => AddCuisineProvider()),
+        ChangeNotifierProvider(create: (context) => DishProvider()),
+        ChangeNotifierProvider(create: (context) => CuisineProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
       ],
       // This is the theme of your application.

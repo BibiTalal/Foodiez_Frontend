@@ -110,17 +110,17 @@ class CuisineStyle extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.edit)),
-                      IconButton(
-                          onPressed: () {
-                            // var delete = context.read<CuisinesProvider>();
-                            // delete.deleteCuisine(index);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ))
+                      // IconButton(
+                      //     onPressed: () {}, icon: const Icon(Icons.edit)),
+                      // IconButton(
+                      //     onPressed: () {
+                      //       // var delete = context.read<CuisinesProvider>();
+                      //       // delete.deleteCuisine(index);
+                      //     },
+                      //     icon: const Icon(
+                      //       Icons.delete,
+                      //       color: Colors.red,
+                      //     ))
                     ],
                   ),
                 ],

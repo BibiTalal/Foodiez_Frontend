@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:foodiez_frontent/providers/cuisine_provider.dart';
-import 'package:foodiez_frontent/models/cuisine.dart';
+import 'package:foodiez_frontent/providers/dishes_provider.dart';
+import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/src/rendering/box.dart';
 
-class AddCuisineScreen extends StatefulWidget {
-  const AddCuisineScreen({Key? key}) : super(key: key);
+class AddDishScreen extends StatefulWidget {
+  const AddDishScreen({Key? key}) : super(key: key);
 
   @override
   @override
-  State<AddCuisineScreen> createState() => _AddCuisineScreenState();
+  State<AddDishScreen> createState() => _AddDishScreenState();
 }
 
-class _AddCuisineScreenState extends State<AddCuisineScreen> {
+class _AddDishScreenState extends State<AddDishScreen> {
   final nameController = TextEditingController();
   File? imageData;
   bool isSubmitting = false;
@@ -25,8 +26,8 @@ class _AddCuisineScreenState extends State<AddCuisineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Cuisine> cuisines =
-        Provider.of<CuisineProvider>(context, listen: false).cuisines;
+    List<Dish> dishes =
+        Provider.of<DishProvider>(context, listen: false).dishes;
     return Scaffold(
         appBar: AppBar(
           title: Text("FOODIEZ"),
@@ -71,7 +72,7 @@ class _AddCuisineScreenState extends State<AddCuisineScreen> {
               controller: nameController,
               enabled: !isSubmitting,
               decoration: InputDecoration(
-                hintText: "Cuisine Name",
+                hintText: "Dish Name",
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -126,14 +127,14 @@ class _AddCuisineScreenState extends State<AddCuisineScreen> {
                   setState(() {
                     isSubmitting = true;
                   });
-                  await context.read<CuisineProvider>().addCuisine(
+                  await context.read<DishProvider>().addDish(
                         name: nameController.text,
                         image: imageData!,
                       );
 
                   context.pop();
                 },
-                child: Text("Add Cuisine")),
+                child: Text("Add Dish")),
             // GridView.builder(
             //     // shrinkWrap: true,
             //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

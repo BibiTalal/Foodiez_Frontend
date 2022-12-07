@@ -14,14 +14,13 @@ class AuthProvider extends ChangeNotifier {
     required String password,
   }) async {
     try {
-      var response = await Client.dio.post("/register", data: {
+      var response = await Client.dio.post("/signin", data: {
         'username': username,
         'password': password,
       });
 
       var access = response.data["access"];
-      Client.dio.options.headers[HttpHeaders.authorizationHeader] =
-          "Bearer $access";
+      Client.dio.options.headers["authorization"] = "Bearer $access";
       this.username = username;
       notifyListeners();
       var pref = await SharedPreferences.getInstance();
