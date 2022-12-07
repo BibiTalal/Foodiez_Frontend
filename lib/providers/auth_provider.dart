@@ -14,7 +14,7 @@ class AuthProvider extends ChangeNotifier {
     required String password,
   }) async {
     try {
-      var response = await Client.dio.post("/signin", data: {
+      var response = await Client.dio.post("/signup", data: {
         'username': username,
         'password': password,
       });
@@ -42,15 +42,51 @@ class AuthProvider extends ChangeNotifier {
     return "unknown error occured";
   }
 
-  Future<String?> login({
-    required String username,
-    required String password,
-  }) async {
-    this.username = username;
+  Future<bool> login(
+      {required String username, required String password}) async {
+    late String access;
+    try {
+      Response response = await Client.dio.post("/signin", data: {
+        "username": username,
+        "password": password,
+      });
+      access = response.data["access"];
+      Client.dio.options.headers["Authorization"] = "Bearer $access";
+      var ref = await SharedPreferences.getInstance();
+      ref.setString("access", access);
+      this.username = username;
+      notifyListeners();
+      return true;
+    } on DioError catch (error) {
+      print(error);
+    }
     notifyListeners();
+
+    return false;
   }
 
-  Future<void> logout() async {
+  Future<bool> hasaccess() async {
+    var pref = await SharedPreferences.getInstance();
+    var access = pref.getString("access");
+
+    if (access == null || JwtDecoder.isExpired(access)) {
+      print('No access'); // for testing
+      return false;
+    }
+
+    var accessMap = JwtDecoder.decode(access);
+    username = accessMap['username'];
+    notifyListeners();
+    // to test
+    print(username);
+    return true;
+  }
+
+  void logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove("token");
+    //test
+    this.hasaccess();
     this.username = null;
     notifyListeners();
   }
