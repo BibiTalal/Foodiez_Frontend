@@ -13,9 +13,17 @@ import 'package:foodiez_frontent/screens/addcuisine.dart';
 import 'package:foodiez_frontent/providers/auth_provider.dart';
 import 'package:foodiez_frontent/screens/adddishes.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var authprovider = AuthProvider();
+
+  var isAuth = await authprovider.hasaccess();
+  print("isAuth $isAuth");
   runApp(
-    MyApp(),
+    MyApp(
+      authprovider: authprovider,
+      // initialRoute:isAuth? '/list':"/",
+    ),
   );
 }
 
@@ -55,7 +63,10 @@ final router = GoRouter(initialLocation: '/', routes: [
 ]);
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthProvider authprovider;
+  MyApp({
+    required this.authprovider,
+  });
 
   // This widget is the root of your application.
   @override
@@ -64,7 +75,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => DishProvider()),
         ChangeNotifierProvider(create: (context) => CuisineProvider()),
-        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => authprovider),
       ],
       // This is the theme of your application.
       //

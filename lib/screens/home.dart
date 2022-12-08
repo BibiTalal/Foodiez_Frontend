@@ -76,20 +76,20 @@ class HomeScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(context.watch<AuthProvider>().username!),
-                      )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.push("/addcuisine");
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Text("Add a new Cuisine"),
+                          ),
+                        ),
+                      ),
                     ]),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                context.push("/addcuisine");
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text("Add a new Cuisine"),
-              ),
-            ),
-          ),
           GridView.builder(
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

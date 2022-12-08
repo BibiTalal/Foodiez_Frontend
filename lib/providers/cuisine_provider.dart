@@ -31,7 +31,7 @@ class CuisineProvider extends ChangeNotifier {
 
     Dio client = Dio();
 
-    var response = await client.get("");
+    var response = await client.get("http://10.0.2.2:8000/");
 
     var cuisinesJson = response.data as List;
 
@@ -56,7 +56,7 @@ class CuisineProvider extends ChangeNotifier {
 
     Dio client = Dio();
 
-    await client.post("",
+    await client.post("http://10.0.2.2:8000/create/category/",
         data: FormData.fromMap({
           "name": name,
           "image": await MultipartFile.fromFile(image.path),
@@ -64,7 +64,26 @@ class CuisineProvider extends ChangeNotifier {
 
     await loadCuisines();
   }
-}
+
+//   Future<void> editCuisine({
+//     required Cuisine cuisine,
+//     required String? name,
+//     required File? image,
+//   }) async {
+//     isLoading = true;
+//     notifyListeners();
+
+//     Dio client = Dio();
+
+//     await client.put("http://127.0.0.1:8000/${cuisine.id}",
+//         data: FormData.fromMap({
+//           "name": name ?? cuisine.name,
+//           if (image != null) "image": await MultipartFile.fromFile(image.path),
+//         }));
+
+//     await loadCuisines();
+//   }
+// }
 
 // class CuisinesProvider extends ChangeNotifier {
 //   List<Cuisine> cuisines = [
@@ -99,3 +118,4 @@ class CuisineProvider extends ChangeNotifier {
 //     notifyListeners();
 //   }
 // }
+}

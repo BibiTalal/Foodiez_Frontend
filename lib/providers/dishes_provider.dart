@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
+import 'package:foodiez_frontent/widgets.dart';
 
 class DishProvider extends ChangeNotifier {
   List<Dish> dishes = [
@@ -30,7 +31,7 @@ class DishProvider extends ChangeNotifier {
 
     Dio client = Dio();
 
-    var response = await client.get("");
+    var response = await client.get("http://10.0.2.2:8000/");
 
     var dishesJson = response.data as List;
 
@@ -49,19 +50,38 @@ class DishProvider extends ChangeNotifier {
   Future<void> addDish({
     required String name,
     required File image,
+    required int? cuisine,
   }) async {
     isLoading = true;
     notifyListeners();
 
     Dio client = Dio();
 
-    await client.post("",
+    await client.post("http://10.0.2.2:8000/",
         data: FormData.fromMap({
           "name": name,
           "image": await MultipartFile.fromFile(image.path),
+          "cuisine": cuisine,
         }));
 
     await loadDishes();
+  }
+
+  addCuisine({required String name, required File image}) {}
+  Future<void> editDish({
+    required int id,
+    required String name,
+    required int cuisine,
+    required File image,
+  }) async {
+    var response = await Client.dio.put("http://10.0.2.2:8000/${id}/",
+        data: FormData.fromMap({
+          "name": name,
+          "cuisine": cuisine,
+          "image": await MultipartFile.fromFile(image.path),
+        }));
+
+    loadDishes();
   }
 }
 

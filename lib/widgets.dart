@@ -43,15 +43,16 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
   );
 }
 
-Container SignUpOrInButton(BuildContext context, String title, Function onTap) {
+Container SignUpOrInButton(
+    BuildContext context, String title, Future Function() onTap) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 50,
     margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
     child: ElevatedButton(
-      onPressed: () {
-        onTap();
+      onPressed: () async {
+        await onTap();
       },
       child: Text(
         title,

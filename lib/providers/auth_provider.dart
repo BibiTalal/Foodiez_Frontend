@@ -9,44 +9,77 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 class AuthProvider extends ChangeNotifier {
   String? username;
 
-  Future<String?> register({
+  Future<bool> register({
     required String username,
     required String password,
   }) async {
     try {
-      var response = await Client.dio.post("/signup", data: {
+      var response =
+          await Client.dio.post("http://10.0.2.2:8000/register/", data: {
         'username': username,
         'password': password,
       });
 
-      var access = response.data["access"];
-      Client.dio.options.headers["authorization"] = "Bearer $access";
+      var token = response.data["access"];
+
+      Client.dio.options.headers[HttpHeaders.authorizationHeader] =
+          "Bearer $token";
       this.username = username;
       notifyListeners();
+
       var pref = await SharedPreferences.getInstance();
-      await pref.setString('access', access);
-      print("Registered Successfully");
-      return null;
-    } on DioError catch (error) {
-      // print(error.response!.data);
-      if (error.response != null &&
-          error.response!.data != null &&
-          error.response!.data is Map) {
-        var map = error.response!.data as Map;
-        return map.values.first.first;
-      }
-    } catch (error) {
-      print(error);
-      return "$error";
+      await pref.setString("token", token);
+      print('register successfully');
+      return true;
+    } on DioError catch (e) {
+      print(e.response!.data);
+    } catch (e) {
+      print("Unknown Error");
     }
-    return "unknown error occured";
+
+    return false;
   }
+
+  // Future<bool> register({
+  //   required String username,
+  //   required String password,
+  // }) async {
+  //   try {
+  //     var response =
+  //         await Client.dio.post("http://10.0.2.2:8000/register/", data: {
+  //       'username': username,
+  //       'password': password,
+  //     });
+
+  //     var access = response.data["access"];
+  //     Client.dio.options.headers[HttpHeaders.authorizationHeader] =
+  //         "Bearer $access";
+  //     this.username = username;
+  //     notifyListeners();
+  //     var pref = await SharedPreferences.getInstance();
+  //     await pref.setString('access', access);
+  //     print("Registered Successfully");
+  //     return true;
+  //   } on DioError catch (error) {
+  //     print(error.response!.data);
+  //     // if (error.response != null &&
+  //     //     error.response!.data != null &&
+  //     //     error.response!.data is Map) {
+  //     //   var map = error.response!.data as Map;
+  //     //   return map.values.first.first;
+  //     // }
+  //   } catch (error) {
+  //     print("unknown error");
+  //   }
+  //   return false;
+  // }
 
   Future<bool> login(
       {required String username, required String password}) async {
     late String access;
     try {
-      Response response = await Client.dio.post("/signin", data: {
+      Response response =
+          await Client.dio.post("http://10.0.2.2:8000/signin/", data: {
         "username": username,
         "password": password,
       });
@@ -84,7 +117,7 @@ class AuthProvider extends ChangeNotifier {
 
   void logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("token");
+    await prefs.remove("access");
     //test
     this.hasaccess();
     this.username = null;
