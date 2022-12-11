@@ -75,6 +75,7 @@ class _SignInState extends State<SignIn> {
                               username: nameController.text,
                               password: passwordController.text);
                           context.pop();
+                          context.push("/welcome", extra: nameController.text);
                         },
                       )),
                   Row(

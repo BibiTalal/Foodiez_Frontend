@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                             child: Text("Add a new Cuisine"),
                           ),
                         ),
-                      ),
+                      )
                     ]),
           GridView.builder(
               shrinkWrap: true,

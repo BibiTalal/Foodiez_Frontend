@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:foodiez_frontent/models/cuisine.dart';
 import 'package:foodiez_frontent/models/dishes.dart';
+import 'package:foodiez_frontent/screens/cuisine/edit_cuisine.dart';
+import 'package:foodiez_frontent/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:foodiez_frontent/screens/signin.dart';
-import 'package:foodiez_frontent/screens/signup.dart';
+import 'package:foodiez_frontent/screens/authentication/signin.dart';
+import 'package:foodiez_frontent/screens/authentication/signup.dart';
 import 'package:foodiez_frontent/screens/home.dart';
 import 'package:foodiez_frontent/screens/welcome.dart';
 import 'package:foodiez_frontent/providers/cuisine_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:foodiez_frontent/providers/dishes_provider.dart';
-import 'package:foodiez_frontent/screens/dishes.dart';
-import 'package:foodiez_frontent/screens/addcuisine.dart';
+import 'package:foodiez_frontent/screens/dish/dishes.dart';
+import 'package:foodiez_frontent/screens/cuisine/addcuisine.dart';
 import 'package:foodiez_frontent/providers/auth_provider.dart';
-import 'package:foodiez_frontent/screens/adddishes.dart';
+import 'package:foodiez_frontent/screens/dish/adddishes.dart';
+import 'package:foodiez_frontent/screens/cuisine/edit_cuisine.dart';
+import 'package:foodiez_frontent/providers/ingredients_provider.dart';
+import 'package:foodiez_frontent/screens/addingredients.dart';
+import 'package:foodiez_frontent/screens/ingredients.dart';
+import 'package:foodiez_frontent/screens/detail.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +68,27 @@ final router = GoRouter(initialLocation: '/', routes: [
     path: '/adddish',
     builder: (context, state) => AddDishScreen(),
   ),
+  GoRoute(
+    path: '/addingredients',
+    builder: (context, state) => AddIngredientsScreen(),
+  ),
+  GoRoute(
+    path: '/ingredients',
+    builder: (context, state) => IngredientsScreen(),
+  ),
+  GoRoute(
+    path: '/detail',
+    builder: (context, state) => DetailScreen(dish: state.extra as Dish),
+  ),
+  // GoRoute(
+  //   path: '/dishstyle',
+  //   builder: (context, state) => DishStyle(
+  //       selectedIngredients: state.extra as List<selectedIngredients>),
+  // ),
+  GoRoute(
+    path: '/editcuisine',
+    builder: (context, state) => EditCuisine(cuisine: state.extra as Cuisine),
+  ),
 ]);
 
 class MyApp extends StatelessWidget {
@@ -76,6 +105,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DishProvider()),
         ChangeNotifierProvider(create: (context) => CuisineProvider()),
         ChangeNotifierProvider(create: (context) => authprovider),
+        ChangeNotifierProvider(create: (context) => IngredientsProvider()),
       ],
       // This is the theme of your application.
       //

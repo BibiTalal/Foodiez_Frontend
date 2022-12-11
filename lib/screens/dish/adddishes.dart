@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodiez_frontent/models/cuisine.dart';
 import 'package:foodiez_frontent/models/dishes.dart';
+import 'package:foodiez_frontent/models/ingredients.dart';
 import 'package:foodiez_frontent/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:foodiez_frontent/providers/dishes_provider.dart';
@@ -11,11 +12,14 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/src/rendering/box.dart';
 import 'package:foodiez_frontent/providers/cuisine_provider.dart';
+import 'package:foodiez_frontent/providers/dishes_provider.dart';
+import 'package:foodiez_frontent/providers/ingredients_provider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class AddDishScreen extends StatefulWidget {
   const AddDishScreen({Key? key}) : super(key: key);
 
-  @override
   @override
   State<AddDishScreen> createState() => _AddDishScreenState();
 }
@@ -27,7 +31,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
   Cuisine? value;
   final _formKey = GlobalKey<FormState>();
   String? imageNull;
-
+  List<Ingredients> selectedIngredients = [];
   @override
   Widget build(BuildContext context) {
     List<Dish> dishes =
@@ -135,27 +139,55 @@ class _AddDishScreenState extends State<AddDishScreen> {
                           this.value = value;
                         },
                       )),
-              Spacer(),
+              Column(children: [
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Add Ingredient"),
+                  IconButton(
+                      onPressed: () => context.push("/addingredients"),
+                      icon: const Icon(
+                        Icons.add_box_rounded,
+                      ))
+                ]),
+              ]),
+              MultiSelectDialogField(
+                buttonText: Text(
+                  "Choose a ingredient",
+                  // static const IconData add_box_rounded = IconData(0xf529, fontFamily: 'MaterialIcons');
+
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 80, 78, 78),
+                    fontSize: 15,
+                  ),
+                ),
+                items: context
+                    .watch<IngredientsProvider>()
+                    .ingredients
+                    .map((e) => MultiSelectItem(e, e.name))
+                    .toList(),
+                listType: MultiSelectListType.CHIP,
+                onConfirm: (values) {
+                  selectedIngredients = values;
+                  print(selectedIngredients.map((e) => e.id).join(", "));
+                },
+              ),
               ElevatedButton(
                   onPressed: () async {
-                    // form
+                    // if (imageData == null) {
+                    //   setState(() {
+                    //     imageNull = "Required field";
+                    //   });
+                    // }
 
-                    if (imageData == null) {
-                      setState(() {
-                        imageNull = "Required field";
-                      });
-                    }
+                    // if (_formKey.currentState!.validate() &&
+                    //     imageData != null) {
+                    await context.read<DishProvider>().addDish(
+                          name: nameController.text,
+                          image: imageData!,
+                          cuisine: value!.id,
+                          selectedIngredients: selectedIngredients,
+                        );
 
-                    if (_formKey.currentState!.validate() &&
-                        imageData != null) {
-                      await context.read<DishProvider>().addDish(
-                            name: nameController.text,
-                            image: imageData!,
-                            cuisine: value!.id,
-                          );
-
-                      context.push('/dishes');
-                    }
+                    context.go('/dish', extra: selectedIngredients.length);
                   },
                   child: Text("Add Dish"))
             ],

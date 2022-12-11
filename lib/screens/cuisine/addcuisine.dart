@@ -120,12 +120,9 @@ class _AddCuisineScreenState extends State<AddCuisineScreen> {
             Spacer(),
             ElevatedButton(
                 onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    return;
-                  }
-                  setState(() {
-                    isSubmitting = true;
-                  });
+                  // setState(() {
+                  //   isSubmitting = true;
+                  // });
                   await context.read<CuisineProvider>().addCuisine(
                         name: nameController.text,
                         image: imageData!,
@@ -134,17 +131,6 @@ class _AddCuisineScreenState extends State<AddCuisineScreen> {
                   context.pop();
                 },
                 child: Text("Add Cuisine")),
-            // GridView.builder(
-            //     // shrinkWrap: true,
-            //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //       crossAxisCount: 2,
-            //       childAspectRatio: MediaQuery.of(context).size.width /
-            //           (MediaQuery.of(context).size.height),
-            //     ),
-            //     // physics: const NeverScrollableScrollPhysics(),
-            //     // itemCount: context.watch<CuisineProvider>().cuisines.length,
-            //     itemBuilder: (context, index) =>
-            //         CuisineStyle(cuisine: cuisines[index])),
           ]),
         )));
   }

@@ -1,23 +1,12 @@
-import 'package:foodiez_frontent/services/dishes_services.dart';
-import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:flutter/material.dart';
 import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:foodiez_frontent/widgets.dart';
+import 'package:foodiez_frontent/models/ingredients.dart';
 
 class DishProvider extends ChangeNotifier {
-  List<Dish> dishes = [
-    Dish(
-      name: "Pasta",
-      image:
-          "https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Spinach-Tomato-Pasta-bowl-500x500.jpg",
-    ),
-    Dish(
-      name: "Pizza",
-      image: "https://static.toiimg.com/photo/msid-87930581/87930581.jpg",
-    )
-  ];
+  List<Dish> dishes = [];
 
   bool isLoading = false;
 
@@ -27,41 +16,36 @@ class DishProvider extends ChangeNotifier {
 
   Future<void> loadDishes() async {
     isLoading = true;
-    notifyListeners();
+    dishes.clear();
+    // notifyListeners();
 
-    Dio client = Dio();
+    var response = await Client.dio.get("http://10.0.2.2:8000/dish/");
 
-    var response = await client.get("http://10.0.2.2:8000/");
+    var dishesJsonL = response.data as List;
 
-    var dishesJson = response.data as List;
-
-    dishes = dishesJson
-        .map((dishJson) => Dish(
-              id: dishJson['id'],
-              name: dishJson['title'],
-              image: dishJson['image'],
-            ))
-        .toList();
+    dishes = dishesJsonL.map((dishJson) => Dish.fromMap(dishJson)).toList();
 
     isLoading = false;
     notifyListeners();
   }
 
   Future<void> addDish({
-    required String name,
-    required File image,
+    required String? name,
+    required File? image,
     required int? cuisine,
+    required List<Ingredients>? selectedIngredients,
   }) async {
-    isLoading = true;
-    notifyListeners();
+    // isLoading = true;
+    // notifyListeners();
 
-    Dio client = Dio();
+    // Dio client = Dio();
 
-    await client.post("http://10.0.2.2:8000/",
+    var response = await Client.dio.post("http://10.0.2.2:8000/dishes/create/",
         data: FormData.fromMap({
           "name": name,
-          "image": await MultipartFile.fromFile(image.path),
+          "image": await MultipartFile.fromFile(image!.path),
           "cuisine": cuisine,
+          "ingredients": selectedIngredients!.map((e) => e.id).toList(),
         }));
 
     await loadDishes();
@@ -70,20 +54,55 @@ class DishProvider extends ChangeNotifier {
   addCuisine({required String name, required File image}) {}
   Future<void> editDish({
     required int id,
-    required String name,
-    required int cuisine,
+    required String? name,
     required File image,
+    required int cuisine,
+    required List<Ingredients> selectedIngredients,
   }) async {
-    var response = await Client.dio.put("http://10.0.2.2:8000/${id}/",
-        data: FormData.fromMap({
-          "name": name,
-          "cuisine": cuisine,
-          "image": await MultipartFile.fromFile(image.path),
-        }));
+    var response =
+        await Client.dio.patch("http://10.0.2.2:8000/dishes/update/$id/",
+            data: FormData.fromMap({
+              // if (name != null && name.isNotEmpty) "name": name,
+              // if (image != null)
+              //   "image": await MultipartFile.fromFile(image.path),
+              "name": name,
+              "ingredient": selectedIngredients.map((e) => e.id).toList(),
+              "cuisine": cuisine,
+              "image": await MultipartFile.fromFile(image.path),
+            }));
 
     loadDishes();
   }
+
+  Future<void> deleteDish({
+    required int id,
+  }) async {
+    var response =
+        await Client.dio.delete("http://10.0.2.2:8000/dish/delete/${id}/");
+    loadDishes();
+  }
 }
+  
+
+//   Future<void> editCuisine({
+//     required Cuisine cuisine,
+//     required String? name,
+//     required File? image,
+//   }) async {
+//     isLoading = true;
+//     notifyListeners();
+
+//     Dio client = Dio();
+
+//     await client.put("http://127.0.0.1:8000/${cuisine.id}",
+//         data: FormData.fromMap({
+//           "name": name ?? cuisine.name,
+//           if (image != null) "image": await MultipartFile.fromFile(image.path),
+//         }));
+
+//     await loadCuisines();
+//   }
+// }
 
 // class CuisinesProvider extends ChangeNotifier {
 //   List<Cuisine> cuisines = [
@@ -118,3 +137,4 @@ class DishProvider extends ChangeNotifier {
 //     notifyListeners();
 //   }
 // }
+

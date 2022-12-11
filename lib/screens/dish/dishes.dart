@@ -45,7 +45,20 @@ class DishScreen extends StatelessWidget {
           Row(children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-            )
+            ),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: Text("Home"),
+                  onPressed: () {
+                    context.push("/");
+                  },
+                )),
+            TextButton(
+                onPressed: () async {
+                  context.push('/ingredients');
+                },
+                child: Text("Ingredients List")),
           ]),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -56,6 +69,18 @@ class DishScreen extends StatelessWidget {
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Text("Add a new Dish"),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                context.push("/addingredients");
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text("Add a new Ingredient"),
               ),
             ),
           ),

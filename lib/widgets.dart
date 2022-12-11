@@ -7,6 +7,10 @@ import 'package:foodiez_frontent/providers/cuisine_provider.dart';
 import 'package:foodiez_frontent/models/dishes.dart';
 import 'package:foodiez_frontent/providers/dishes_provider.dart';
 import 'package:dio/dio.dart';
+import 'dart:io';
+import 'package:foodiez_frontent/screens/cuisine/edit_cuisine.dart';
+import 'package:foodiez_frontent/models/ingredients.dart';
+import 'package:foodiez_frontent/providers/ingredients_provider.dart';
 
 class Client {
   static final Dio dio = Dio(
@@ -72,9 +76,26 @@ Container SignUpOrInButton(
   );
 }
 
-class CuisineStyle extends StatelessWidget {
+class CuisineStyle extends StatefulWidget {
   final Cuisine cuisine;
   const CuisineStyle({Key? key, required this.cuisine}) : super(key: key);
+
+  @override
+  State<CuisineStyle> createState() => _CuisineStyleState();
+}
+
+class _CuisineStyleState extends State<CuisineStyle> {
+  final nameController = TextEditingController();
+  File? imageFile;
+  String? imageError;
+
+  var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.cuisine.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +104,7 @@ class CuisineStyle extends StatelessWidget {
         children: [
           Expanded(
             child: Image.network(
-              cuisine.image,
+              widget.cuisine.image,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -96,7 +117,7 @@ class CuisineStyle extends StatelessWidget {
                 children: [
                   Center(
                       child: Text(
-                    cuisine.name,
+                    widget.cuisine.name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(232, 0, 0, 0),
@@ -111,17 +132,20 @@ class CuisineStyle extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      // IconButton(
-                      //     onPressed: () {}, icon: const Icon(Icons.edit)),
-                      // IconButton(
-                      //     onPressed: () {
-                      //       // var delete = context.read<CuisinesProvider>();
-                      //       // delete.deleteCuisine(index);
-                      //     },
-                      //     icon: const Icon(
-                      //       Icons.delete,
-                      //       color: Colors.red,
-                      //     ))
+                      IconButton(
+                          onPressed: () => context.push("/editcuisine"),
+                          icon: const Icon(Icons.edit)),
+                      IconButton(
+                          onPressed: () async {
+                            await context
+                                .read<CuisineProvider>()
+                                .deleteCuisine(id: widget.cuisine.id);
+                            context.pop();
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ))
                     ],
                   ),
                 ],
@@ -134,9 +158,26 @@ class CuisineStyle extends StatelessWidget {
   }
 }
 
-class DishStyle extends StatelessWidget {
+class DishStyle extends StatefulWidget {
   final Dish dish;
   const DishStyle({Key? key, required this.dish}) : super(key: key);
+
+  @override
+  State<DishStyle> createState() => _DishStyleState();
+}
+
+class _DishStyleState extends State<DishStyle> {
+  final nameController = TextEditingController();
+  File? imageFile;
+  String? imageError;
+
+  var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.dish.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +186,7 @@ class DishStyle extends StatelessWidget {
         children: [
           Expanded(
             child: Image.network(
-              dish.image,
+              widget.dish.image,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -158,23 +199,109 @@ class DishStyle extends StatelessWidget {
                 children: [
                   Center(
                       child: Text(
-                    dish.name,
+                    widget.dish.name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(232, 0, 0, 0),
                         fontSize: 22),
                   )),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push("/detail");
+                    },
                     child: const Text("Show Ingredients"),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.edit)),
+                          onPressed: () => context.push("/editdish"),
+                          icon: const Icon(Icons.edit)),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            await context
+                                .read<DishProvider>()
+                                .deleteDish(id: widget.dish.id);
+                            context.pop();
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class IngredientsStyle extends StatefulWidget {
+  final Ingredients ingredient;
+  const IngredientsStyle({Key? key, required this.ingredient})
+      : super(key: key);
+
+  @override
+  State<IngredientsStyle> createState() => _IngredientsStyleState();
+}
+
+class _IngredientsStyleState extends State<IngredientsStyle> {
+  final nameController = TextEditingController();
+  File? imageFile;
+  String? imageError;
+
+  var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.ingredient.name;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          // Expanded(
+          //   child: Image.network(
+          //     widget.ingredients.image,
+          //     fit: BoxFit.cover,
+          //     width: double.infinity,
+          //   ),
+          // ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: Text(
+                    widget.ingredient.name,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(232, 0, 0, 0),
+                        fontSize: 22),
+                  )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                          onPressed: () => context.push("/editingredients"),
+                          icon: const Icon(Icons.edit)),
+                      IconButton(
+                          onPressed: () async {
+                            await context
+                                .read<IngredientsProvider>()
+                                .deleteIngredients(id: widget.ingredient.id);
+                            context.pop();
+                            context.push("/ingredients");
+                          },
                           icon: const Icon(
                             Icons.delete,
                             color: Colors.red,

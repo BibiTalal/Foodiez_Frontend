@@ -81,6 +81,8 @@ class _SignUpState extends State<SignUp> {
                                 password: passwordController.text);
                             if (success == true) {
                               context.pop();
+                              context.push("/welcome",
+                                  extra: nameController.text);
                             } else {
                               print("error");
                             }
